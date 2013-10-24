@@ -1,0 +1,204 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="-1">
+
+	<title>ANIME jQuery : TEST 02 - 3D</title>
+	<script src="./js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/plugins/jquery.is.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/plugins/jquery.css3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/plugins/jquery.anime.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		* {
+			border: 			0;
+			padding:			0;
+			margin: 			0;
+			border: 			0;
+			font-weight: 		normal;
+			font-style: 		normal;
+			font-family: 		helvetica neue, helvetica, arial, sans-serif;
+			line-height: 		7px;
+		}
+		
+		html {
+			background-color:		#A0A0A0;
+		}
+		
+		body {
+			background-color:		#A0A0A0;
+			color: 					#FFFFFF;
+			background-attachment:	fixed;
+			height: 				100%;
+			margin-top: 20px;
+			margin-left: 20px;
+		}
+		.awesome {
+			display: inline-block;
+			padding: 5px 10px 6px;
+			color: #fff;
+			text-decoration: none;
+			font-weight: bold;
+			line-height: 1;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-moz-box-shadow: 0 1px 3px #999;
+			text-shadow: 0 -1px 1px #222;
+			border-bottom: 1px solid #222;
+			position: relative;
+			cursor: pointer;
+			-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+			-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+			text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+			border-bottom: 1px solid rgba(0,0,0,0.25);
+			font-size: 15px;
+		}
+		.3dbox{}
+		.3dshd{}
+	</style>
+  	<script type="text/javascript" charset="utf-8">
+		nx=3;
+		ny=3;
+
+  		TYPEANIME='JS';
+  		
+  		
+  		note=function(){
+  			if (TYPEANIME=='JS') txt='Note: All properties can be animed at same time';
+  			if (TYPEANIME=='TRANSITION') txt='Note: Tranform properties CAN NOT be animed at same time<br/> because CSS3 3D Especification can\'t handdle.';
+  			$('#fps').html(ANIMATIONFRAMESxSECOND+ " / Animation type: "+TYPEANIME);
+  			$('#note').html(txt+'<br/>');
+  		}
+  		
+  		set=function(type){
+  			stopall()
+			TYPEANIME=type;
+			note();
+  		}
+  		
+  		pauseall=function(){
+			for (var j=0; j<nx; j++){
+				for (var i=0; i<ny; i++){
+					var d=$('#'+'shd'+i+'_'+j)
+					d.pause('boxanim');
+					var d=$('#'+'box'+i+'_'+j)
+					d.pause('boxanim');
+				}
+			}
+  		}
+
+		playall=function(){
+			for (var j=0; j<nx; j++){
+				for (var i=0; i<ny; i++){
+					var d=$('#'+'shd'+i+'_'+j)
+					d.play('boxanim');
+					var d=$('#'+'box'+i+'_'+j)
+					d.play('boxanim');
+				}
+			}
+		}
+
+		stopall=function(){
+			for (var j=0; j<nx; j++){
+				for (var i=0; i<ny; i++){
+					var d=$('#'+'shd'+i+'_'+j)
+					d.stop('boxanim');
+					var d=$('#'+'box'+i+'_'+j)
+					d.stop('boxanim');
+				}
+			}
+		}
+
+		fps=function(f){
+			if (f!==undefined) {
+				ANIMATIONFRAMESxSECOND=f;
+				ANIMATIONTICK=Math.floor(1000/ANIMATIONFRAMESxSECOND);
+			}
+			note();
+		}
+  		
+		$(document).ready(function(){
+			fps();
+			
+			var world=$('<div/>');
+			
+			for (var j=0; j<nx; j++){
+				for (var i=0; i<ny; i++){
+					var d=$('<div/>');
+					d.attr('id','shd'+i+'_'+j)
+					d.attr('class','3dshd')
+					d.css('position','absolute')
+					d.css('width','100px')
+					d.css('height','100px')
+					var x=(200+(150+nx)*i)+'px';
+					var y=(200+(150+ny)*j)+'px';
+					d.css('left', x)
+					d.css('top', y)
+					d.css('border-radius','10px')
+					d.css('background-color', '#777')
+					world.append(d);
+				}
+			}
+			
+			for (var j=0; j<nx; j++){
+				for (var i=0; i<ny; i++){
+					var d=$('<div/>');
+					d.attr('id','box'+i+'_'+j)
+					d.attr('class','3dbox')
+					d.css('position','absolute')
+					d.css('width','120px')
+					d.css('height','120px')
+					var x=(200+(150+nx)*i)+'px';
+					var y=(200+(150+ny)*j)+'px';
+					d.css('left', x)
+					d.css('top', y)
+					d.css('border-radius','10px')
+					d.css('background-color', 'rgb('+Math.round(Math.random()*100)+'%, '+Math.round(Math.random()*100)+'%, '+Math.round(Math.random()*100)+'%)')
+					world.append(d);
+				}
+			}
+
+			setInterval(function(){
+//				for (var j=0; j<nx; j++){
+//					for (var i=0; i<ny; i++){
+						var x=Math.random()*10;
+						var y=Math.random()*10;
+						var z=Math.random()*100;
+			
+//						var d=$('#'+'shd'+i+'_'+j)
+						var d=$('.3dshd')
+						d.animate({translate:{x:x,y:y,z:0},scale:{x:1+z/200,y:1+z/200}, rotate:{z:z*2}},{type:TYPEANIME,queue:'boxanim', duration: 500, easing: 'easeInOut'});
+			
+//						var d=$('#'+'box'+i+'_'+j)
+						var d=$('.3dbox')
+						d.animate({translate:{x:x,y:y,z:z+50}, rotate:{x:x*2,y:y*2,z:z*2}},{type:TYPEANIME,queue:'boxanim', duration: 500, easing: 'easeInOut'});
+//					}
+//				}
+			},500);
+			world.css('transform-style', 'preserve-3d');
+			$('body').append(world);
+
+			// Set 3D Space
+			$('body').css('perspective', '500');
+			$('body').css('transform-origin', '400px 400px 0px');
+			$('body').css('transform-style', 'preserve-3d');
+
+		});
+  	</script>
+</head>
+<body>
+<br/>
+<h1>ANIME jQuery</h1><br/>
+<h4>TEST 02 - 3D</h4><br/><br/>
+<h6>FPS:<span id="fps"></span></h6><br/>
+<button class='awesome' onclick="set('JS')">animate JS</button>
+<button class='awesome' onclick="set('TRANSITION')">animate Transition</button><br/>
+<button class='awesome' onclick="fps(10)">JS at 10FPS</button>
+<button class='awesome' onclick="fps(30)">JS at 30FPS</button>
+<button class='awesome' onclick="fps(75)">JS at 75FPS</button>
+<button class='awesome' onclick="fps(150)">JS at 150FPS</button>
+<button class='awesome' onclick="fps(1000)">JS at 1000FPS</button>
+</body>
+</html>

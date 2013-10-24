@@ -1,0 +1,173 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="-1">
+	
+	<title>ANIME jQuery : TEST 01 - Multiple properties any time</title>
+	
+	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plugins/jquery.is.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plugins/jquery.css3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plugins/jquery.anime.js" type="text/javascript" charset="utf-8"></script>
+	
+	<style type="text/css">
+		* {
+			border: 			0;
+			padding:			0;
+			margin: 			0;
+			border: 			0;
+			font-weight: 		normal;
+			font-style: 		normal;
+			font-family: 		helvetica neue, helvetica, arial, sans-serif;
+			line-height: 		1;
+		}
+		
+		html {
+			background-color:		#A0A0A0;
+		}
+		
+		body {
+			background-color:		#A0A0A0;
+			color: 					#FFFFFF;
+			background-attachment:	fixed;
+			height: 				100%;
+			padding: 20px;
+		}
+		
+		#box {
+			position: 				absolute;
+			background-color: 		#F0F0F0;
+			width: 					100px;
+			height: 				100px;
+			top: 					300px;
+			left: 					20px;
+		}
+		.awesome {
+			position: relative;
+			display: inline-block;
+
+			color: #FFF;
+			background-color: #909090;
+
+			padding: 5px 10px 6px;
+
+			font-size: 15px;
+			font-weight: bold;
+
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+
+			box-shadow: 0 1px 3px #000;
+			-moz-box-shadow: 0 1px 3px #000;
+			-webkit-box-shadow: 0 1px 3px #000;
+
+			text-shadow: 0 -1px 1px #222;
+
+			border: 0 solid;
+
+			cursor: pointer;
+			text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+			
+			margin-left:5px;
+			margin-bottom:5px;
+		}
+  	</style>
+  	<script type="text/javascript" charset="utf-8">
+  		TYPEANIME='JS';
+  		
+  		note=function(){
+  			if (TYPEANIME=='JS') txt='Note: All properties can be animed at same time';
+  			if (TYPEANIME=='TRANSITION') txt='Note: Tranform properties CAN NOT be animed at same time<br/> because CSS3 3D Especification can\'t handdle.';
+  			$('#fps').html(ANIMATIONFRAMESxSECOND+ " / Animation type: "+TYPEANIME);
+  			$('#note').html(txt+'<br/>');
+  		}
+  		
+  		set=function(type){
+  			stopall()
+			TYPEANIME=type;
+			note();
+  		}
+  		
+  		pauseall=function(){
+			var d=$('#box');
+			d.pause('boxanim');
+  		}
+
+		playall=function(){
+			var d=$('#box');
+			d.play('boxanim');
+		}
+
+		stopall=function(){
+			var d=$('#box');
+			d.stop('boxanim');
+		}
+
+  		fps=function(f){
+  			if (f!==undefined) {
+	  			ANIMATIONFRAMESxSECOND=f;
+  				ANIMATIONTICK=Math.floor(1000/ANIMATIONFRAMESxSECOND);
+  			}
+  			note();
+  		}
+
+
+		$(document).ready(function(){
+			fps();
+			// Set 3D Space
+			$('body').css('perspective', '200');
+			$('body').css('transform-style', 'preserve-3d');
+
+			var d=$('#box');
+			tx=function(){
+				d.animate({translate:{x:200}}, {type:TYPEANIME,queue:'animA',duration:2000,easing: 'easeInOut'});
+				d.animate({translate:{x:  0}}, {type:TYPEANIME,queue:'animA',duration:2000,easing: 'easeInOut'});
+			}
+			rzang=0;
+			rz=function(a){
+				rzang+=90*a;
+				d.animate({rotate:{z:rzang}},{type:TYPEANIME,queue:'animB',duration:2000,easing: 'easeInOut'});
+			}
+			ty=function(){
+				d.animate({translate:{y:200}},{type:TYPEANIME,queue:'animD',duration:500,easing: 'easeInOut'});
+				d.animate({translate:{y:  0}},{type:TYPEANIME,queue:'animD',duration:500,easing: 'easeInOut'});
+			}
+			tz=function(){
+				d.animate({translate:{z: 50}},{type:TYPEANIME,queue:'animE',duration:1000,easing: 'easeInOut'});
+				d.animate({translate:{z:  0}},{type:TYPEANIME,queue:'animE',duration:1000,easing: 'easeInOut'});
+			}
+			op=function(){
+				d.animate({opacity:0},{type:TYPEANIME,queue:'animF',duration:1000,easing: 'linear'});
+				d.animate({opacity:1},{type:TYPEANIME,queue:'animF',duration:1000,easing: 'linear'});
+			}
+			// Set 3D Space
+			$('body').css('perspective', '500');
+			$('body').css('transform-origin', '400px 400px 0px');
+			$('body').css('transform-style', 'preserve-3d');
+		});
+  	</script>
+</head>
+<body><br/>
+<h1>ANIME jQuery</h1><br/>
+<h4>TEST 01 - Multiple properties any time</h4><br/>
+<h6>FPS:<span id="fps"></span></h6><br/>
+<h6><span id="note"></span><br/>
+<button class='awesome' onclick="rz(+1)">Rotate Z (+90)</button>
+<button class='awesome' onclick="rz(-1)">Rotate Z (-90)</button>
+<button class='awesome' onclick="tx()">Tranlate X (200-0)</button>
+<button class='awesome' onclick="ty()">Tranlate Y (200-0)</button>
+<button class='awesome' onclick="tz()">Tranlate Z (50-0)</button>
+<button class='awesome' onclick="op()">Opacity (0-1)</button><br/>
+<button class='awesome' onclick="set('JS')">animate JS</button>
+<button class='awesome' onclick="set('TRANSITION')">animate Transition</button><br/>
+<button class='awesome' onclick="fps(10)">JS at 10FPS</button>
+<button class='awesome' onclick="fps(30)">JS at 30FPS</button>
+<button class='awesome' onclick="fps(75)">JS at 75FPS</button>
+<button class='awesome' onclick="fps(150)">JS at 150FPS</button>
+<button class='awesome' onclick="fps(1000)">JS at 1000FPS</button>
+<div id="box"></div>
+</body>
+</html>
